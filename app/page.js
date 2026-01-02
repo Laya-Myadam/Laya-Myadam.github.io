@@ -1,3 +1,4 @@
+import Navbar from '../components/Navbar' // Import the new Navbar
 import Photo from '../components/Photo'
 import About from '../components/About'
 import Skills from '../components/Skills'
@@ -7,8 +8,9 @@ import Contact from '../components/Contact'
 
 export default function Home() {
   return (
-    <main>
-      <Photo />
+    <main className="bg-[#0F172A]">
+      <Navbar /> {/* Now sticky and persistent */}
+      <Photo />  {/* This is now JUST the hero content */}
       <About />
       <Skills />
       <Projects />
