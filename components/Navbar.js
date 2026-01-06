@@ -1,6 +1,16 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import { Menu, X, Cpu, Brain } from 'lucide-react'
+import {
+  Menu,
+  X,
+  Cpu,
+  Brain,
+  User,
+  Code2,
+  Terminal,
+  Briefcase,
+  Mail
+} from 'lucide-react'
 
 // --- NEURAL NETWORK CANVAS EFFECT ---
 const NeuralNetworkEffect = () => {
@@ -59,7 +69,11 @@ const NeuralNetworkEffect = () => {
       animationFrameId = requestAnimationFrame(animate);
     };
     animate();
-    return () => { window.removeEventListener('resize', resizeCanvas); window.removeEventListener('mousemove', handleMouseMove); cancelAnimationFrame(animationFrameId); };
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animationFrameId);
+    };
   }, []);
 
   return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-[5]" />;
@@ -72,10 +86,13 @@ const NeuralCursor = () => {
 
   useEffect(() => {
     const updateCursor = (e) => setPosition({ x: e.clientX, y: e.clientY });
-    const handleMouseOver = (e) => setIsHovered(e.target.closest('a') || e.target.closest('button'));
+    const handleMouseOver = (e) => setIsHovered(!!(e.target.closest('a') || e.target.closest('button')));
     window.addEventListener('mousemove', updateCursor);
     window.addEventListener('mouseover', handleMouseOver);
-    return () => { window.removeEventListener('mousemove', updateCursor); window.removeEventListener('mouseover', handleMouseOver); };
+    return () => {
+      window.removeEventListener('mousemove', updateCursor);
+      window.removeEventListener('mouseover', handleMouseOver);
+    };
   }, []);
 
   return (
@@ -91,6 +108,16 @@ const NeuralCursor = () => {
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Array of objects to hold both the label and its corresponding Icon
+  const navLinks = [
+    { label: 'About', icon: <User className="w-4 h-4" /> },
+    { label: 'Skills', icon: <Code2 className="w-4 h-4" /> },
+    { label: 'Projects', icon: <Terminal className="w-4 h-4" /> },
+    { label: 'Articles', icon: <Brain className="w-4 h-4" /> },
+    { label: 'Experience', icon: <Briefcase className="w-4 h-4" /> },
+    { label: 'Contact', icon: <Mail className="w-4 h-4" /> },
+  ];
 
   return (
     <>
@@ -111,24 +138,49 @@ export default function Navbar() {
               </span>
             </div>
 
-            {/* LINKS RIGHT */}
-            <div className="hidden md:flex space-x-4">
-              {['About', 'Skills', 'Projects', 'Experience', 'Contact'].map((label) => (
-                <a key={label} href={`#${label.toLowerCase()}`}
-                   className="px-4 py-2 rounded-full font-medium text-white text-sm bg-indigo-600/10 border border-indigo-400/20 hover:bg-indigo-600/30 transition-all cursor-none">
-                  {label}
+            {/* LINKS RIGHT (DESKTOP) */}
+            <div className="hidden md:flex space-x-2">
+              {navLinks.map((item) => (
+                <a key={item.label} href={`#${item.label.toLowerCase()}`}
+                   className="group px-3 py-2 rounded-full font-medium text-white text-sm bg-indigo-600/10 border border-indigo-400/20 hover:bg-cyan-400/20 hover:border-cyan-400/50 hover:shadow-[0_0_15px_rgba(34,211,238,0.2)] transition-all cursor-none flex items-center gap-2">
+                  <span className="text-cyan-400 group-hover:scale-110 transition-transform">
+                    {item.icon}
+                  </span>
+                  {item.label}
                 </a>
               ))}
             </div>
 
+            {/* MOBILE TOGGLE */}
             <button className="md:hidden text-gray-300" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
+
+        {/* MOBILE MENU */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-[#0F172A] border-b border-white/10 px-4 py-6 flex flex-col gap-4">
+            {navLinks.map((item) => (
+              <a
+                key={item.label}
+                href={`#${item.label.toLowerCase()}`}
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center gap-4 text-white font-medium text-lg hover:text-cyan-400 transition-colors"
+              >
+                <span className="text-cyan-400">{item.icon}</span>
+                {item.label}
+              </a>
+            ))}
+          </div>
+        )}
       </nav>
+
       <style jsx global>{`
-        @keyframes spin-slow { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+        @keyframes spin-slow {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
         .animate-spin-slow { animation: spin-slow 15s linear infinite; }
       `}</style>
     </>
