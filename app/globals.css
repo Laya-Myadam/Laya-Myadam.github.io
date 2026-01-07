@@ -28,7 +28,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   @import url('https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap');
-  font-family: 'Comic Neue', "Comic Sans MS", cursive;
+  font-family: 'Comic Neue', "Comic Sans MS", "Chalkboard SE", "Arial Rounded MT Bold", sans-serif;
   line-height: 1.6;
 }
 
